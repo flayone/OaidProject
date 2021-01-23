@@ -1,0 +1,4 @@
+include ':app'
+include ':advanceoaid'
+
+rootProject.name = "OaidProject"
