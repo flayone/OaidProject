@@ -30,4 +30,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+
+    implementation 'io.github.flayone:oaid-sdk:1.0.25'
+    implementation 'com.mercury:mercurysdk:3.4.2'
+
 }

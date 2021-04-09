@@ -1,7 +1,17 @@
+apply from: "maven_aar.gradle"
+//apply from: 'mvn.gradle'
 apply plugin: 'com.android.library'
 
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'com.kezong.fat-aar'
+//apply from: "${rootDir}/scripts/publish-mavencentral.gradle"
+
+//ext {
+//    PUBLISH_GROUP_ID = Configuration.artifactGroup
+//    PUBLISH_VERSION = Configuration.versionName
+//    PUBLISH_ARTIFACT_ID = 'stream-chat-android'
+//}
+
 
 def advanceVersionName = "1.0.25_c"
 def advanceVersionCode = 1
@@ -54,14 +64,17 @@ dependencies {
     embed(name: 'oaid_sdk_1.0.25', ext: 'aar')
 
 }
-
-
-publish {
-    userOrg = 'jinghuashuiyue'//bintray.com用户名
-    repoName = 'advsdk'
-    groupId = 'com.advsdk'//jcenter上的路径
-    artifactId = 'advance_oaid'//项目名称
-    publishVersion = advanceVersionName //版本号
-    desc = 'advanceSDK_oaid'//描述，不重要
-    website = 'https://github.com/bayescom/advancesdk_android'//网站，不重要
+android.libraryVariants.all { variant ->
+    variant.outputs.all {
+        outputFileName = 'oaid_' + advanceVersionName + '.aar'
+    }
 }
+//publish {
+//    userOrg = 'jinghuashuiyue'//bintray.com用户名
+//    repoName = 'advsdk'
+//    groupId = 'com.advsdk'//jcenter上的路径
+//    artifactId = 'advance_oaid'//项目名称
+//    publishVersion = advanceVersionName //版本号
+//    desc = 'advanceSDK_oaid'//描述，不重要
+//    website = 'https://github.com/bayescom/advancesdk_android'//网站，不重要
+//}
