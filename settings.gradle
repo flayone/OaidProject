@@ -1,3 +1,4 @@
+include ':myOaid'
 include ':app'
 include ':advanceoaid'
 
