@@ -1,19 +1,10 @@
 apply from: "maven_aar.gradle"
-//apply from: 'mvn.gradle'
 apply plugin: 'com.android.library'
 
-//apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'com.kezong.fat-aar'
-//apply from: "${rootDir}/scripts/publish-mavencentral.gradle"
-
-//ext {
-//    PUBLISH_GROUP_ID = Configuration.artifactGroup
-//    PUBLISH_VERSION = Configuration.versionName
-//    PUBLISH_ARTIFACT_ID = 'stream-chat-android'
-//}
 
 
-def advanceVersionName = "1.0.25_c"
+def advanceVersionName = "1.0.25"
 def advanceVersionCode = 1
 
 android {

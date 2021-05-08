@@ -3,9 +3,9 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-
-def oaidVersionName = "1.0-SNAPSHOT"
-//def oaidVersionName = "1.0"
+def pomName = "oaid"
+def oaidVersionName = "2.0"
+def outputName = pomName + "_" + oaidVersionName + ".aar"
 
 android {
     compileSdkVersion 29
@@ -31,7 +31,7 @@ android {
 
 android.libraryVariants.all { variant ->
     variant.outputs.all {
-        outputFileName = 'oaid_' + oaidVersionName + '.aar'
+        outputFileName = outputName
     }
 }
 
@@ -106,7 +106,7 @@ publishing {
                 }
             }
             // Tell maven to prepare the generated "*.jar/*.aar" file for publishing
-            artifact("$rootDir/${project.getName()}/build/outputs/aar/${'oaid_' + oaidVersionName + '.aar'}")
+            artifact("$rootDir/${project.getName()}/build/outputs/aar/${outputName}")
 
 //            from components.release
         }

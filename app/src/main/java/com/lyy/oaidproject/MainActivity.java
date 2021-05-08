@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flayone.oaid.AppIdsUpdater;
+import com.flayone.oaid.MyOAID;
 import com.flayone.oaid.OAIDHelper;
 import com.mercury.sdk.core.config.MercuryAD;
 
@@ -18,46 +19,51 @@ public class MainActivity extends AppCompatActivity {
 
     TextView oaidTextSDK;
     TextView oaidTextCode;
+    TextView oaidTextSDKSaved;
+    TextView oaidTextCodeSaved;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        oaidTextSDK = findViewById(R.id.sdk);
+        oaidTextCodeSaved = findViewById(R.id.codeSaved);
         oaidTextCode = findViewById(R.id.code);
+        oaidTextSDKSaved = findViewById(R.id.sdkSaved);
+        oaidTextSDK = findViewById(R.id.sdk);
 
-        String oaid = MercuryAD.getOAID();
-        Log.d("MercuryAD.getOAID()", "oaid = " + oaid);
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                OAIDHelper.getOAid(MainActivity.this, new AppIdsUpdater() {
-//                    @Override
-//                    public void OnIdsAvalid(@NonNull String ids) {
-//                        Log.d("OnIdsAvalid", "oaid = " + ids);
-//
-//                        Toast.makeText(MainActivity.this, "oaid = " + ids, Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//            }
-//        }).start();
-        oaidTextSDK.setText("MercuryAD.getOAID() = "+ MercuryAD.getOAID());
+        oaidTextCodeSaved.setText("oaid源码存储值：\n " + MyOAID.getOAID(this));
+
+        oaidTextSDKSaved.setText("msa sdk存储值：\n " + MercuryAD.getOAID());
 
         OAIDHelper.getOAid(this, new AppIdsUpdater() {
             @Override
-            public void OnIdsAvalid(@NonNull final String ids) {
-                Log.d("OnIdsAvalid", "oaid = " + ids);
+            public void OnIdsAvalid(@NonNull final String id) {
 
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-//                        Toast.makeText(MainActivity.this, "oaid = " + ids, Toast.LENGTH_LONG).show();
+                        oaidTextCode.setText("oaid源码实时值：\n " + id);
 
-                        oaidTextCode.setText("Code getOAid= "+ids);
                     }
                 });
             }
         });
+
+        new MsaOaidHelper(new MsaOaidHelper.OaidUpdater() {
+            @Override
+            public void IdReceived(@NonNull final String id) {
+
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        oaidTextSDK.setText("msa sdk实时值：\n " + id);
+
+                    }
+                });
+            }
+        }).getDeviceIds(this);
+
     }
 }

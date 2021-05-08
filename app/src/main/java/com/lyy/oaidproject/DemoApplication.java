@@ -2,6 +2,7 @@ package com.lyy.oaidproject;
 
 import android.app.Application;
 
+import com.flayone.oaid.MyOAID;
 import com.mercury.sdk.core.config.MercuryAD;
 
 public class DemoApplication extends Application {
@@ -13,13 +14,10 @@ public class DemoApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        //MercurySDK 初始化
+        //MercurySDK 初始化，MercurySDK会初始化msa SDK，并保存获取到的oaid值
         MercuryAD.initSDK(this, APP_ID, APP_KEY);
-        //设置debug状态
-        MercuryAD.setDebug(true);
-        //是否支持素材提前加载，默认false不支持
-        MercuryAD.needPreLoadMaterial(true);
-        //自定义debug下的tag标志
-//        MercuryAD.setDebugTag("MercuryDemo");
+
+        //初始化代码获取的oaid值
+        MyOAID.init(this);
     }
 }

@@ -1,5 +1,5 @@
 include ':myOaid'
 include ':app'
-include ':advanceoaid'
+include ':msaOaid'
 
 rootProject.name = "OaidProject"
