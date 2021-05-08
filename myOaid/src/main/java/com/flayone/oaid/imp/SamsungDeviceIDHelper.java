@@ -27,6 +27,7 @@ public class SamsungDeviceIDHelper {
     }
 
     public void getSumsungID(AppIdsUpdater _listener) {
+        String oaid = "";
         try {
             try {
                 mContext.getPackageManager().getPackageInfo("com.samsung.android.deviceidservice", 0);
@@ -41,16 +42,17 @@ public class SamsungDeviceIDHelper {
                 try {
                     IBinder iBinder = linkedBlockingQueue.take();
                     SamsungIDInterface.Proxy proxy = new SamsungIDInterface.Proxy(iBinder);       // 在这里有区别，需要实际验证
-                    String oaid = proxy.getID();
-                    if (_listener != null) {
-                        _listener.OnIdsAvalid(oaid);
-                    }
+                    oaid = proxy.getID();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         } catch (Throwable e) {
             e.printStackTrace();
+        }
+        if (_listener != null) {
+            _listener.OnIdsAvalid(oaid);
         }
     }
 

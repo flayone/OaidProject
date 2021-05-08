@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 
 import com.flayone.oaid.AppIdsUpdater;
 
@@ -83,7 +84,8 @@ public class MeizuDeviceIDHelper {
             }
             cursor.moveToFirst();
             int valueIdx = cursor.getColumnIndex("value");
-            if (valueIdx > 0) {
+            Log.d("MeizuDeviceIDHelper", "[getOaid] valueIdx = " + valueIdx);
+            if (valueIdx >= 0) {
                 oaid = cursor.getString(valueIdx);
             }
             valueIdx = cursor.getColumnIndex("code");
