@@ -1,9 +1,6 @@
 package com.flayone.oaid;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -16,6 +13,10 @@ public class MyOAID {
 
 
     public static void init(final Context context) {
+        init(context, null);
+    }
+
+    public static void init(final Context context, final ResultCallBack callBack) {
         OAIDHelper.getOAid(context, new AppIdsUpdater() {
             @Override
             public void OnIdsAvalid(@NonNull final String oaid) {
@@ -25,6 +26,9 @@ public class MyOAID {
                     if (TextUtils.isEmpty(oaid)) {
                         Log.e(TAG, "oaid为空,未获取到oaid");
                         return;
+                    }
+                    if (callBack != null) {
+                        callBack.onResult(oaid);
                     }
                     OAIDManager.getInstance().setOaId(oaid);
                     OAIDManager.saveString(context, SP_OAID, oaid);
@@ -52,5 +56,7 @@ public class MyOAID {
         }
     }
 
-
+    public static String getVersion(){
+        return BuildConfig.VERSION_NAME;
+    }
 }
