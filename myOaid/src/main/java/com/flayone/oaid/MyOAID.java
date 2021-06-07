@@ -56,7 +56,7 @@ public class MyOAID {
         }
     }
 
-    public static String getVersion(){
+    public static String getVersion() {
         return BuildConfig.VERSION_NAME;
     }
 }
