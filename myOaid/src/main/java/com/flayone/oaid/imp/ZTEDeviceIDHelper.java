@@ -21,6 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class ZTEDeviceIDHelper {
     Context mContext;
     String idPkgName = "com.mdid.msa";
+    AppIdsUpdater _listener;
 
     public ZTEDeviceIDHelper(Context ctx) {
         mContext = ctx;
@@ -51,7 +52,7 @@ public class ZTEDeviceIDHelper {
                 if (mContext.startService(intent) != null) {
                     return;
                 }
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         } catch (Throwable e) {
@@ -63,7 +64,7 @@ public class ZTEDeviceIDHelper {
         try {
             try {
                 mContext.getPackageManager().getPackageInfo(idPkgName, 0);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
             String pkgName = mContext.getPackageName();
@@ -85,10 +86,10 @@ public class ZTEDeviceIDHelper {
                     }
 
                     mContext.unbindService(serviceConnection);
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 } finally {
-                    if(serviceConnection!=null){
+                    if (serviceConnection != null) {
                         mContext.unbindService(serviceConnection);
                     }
                 }
@@ -103,15 +104,27 @@ public class ZTEDeviceIDHelper {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             try {
-                linkedBlockingQueue.put(service);
-            } catch (Exception e) {
+                ZTEIDInterface zteidInterface = new ZTEIDInterface.Proxy(service);
+                String oaid = zteidInterface.getOAID();
+                if (_listener != null) {
+                    _listener.OnIdsAvalid(oaid);
+                }
+                mContext.unbindService(serviceConnection);
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
-
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+            try {
+                if (_listener != null) {
+                    _listener.OnIdsAvalid("");
+                }
+                mContext.unbindService(serviceConnection);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         }
     };
 }

@@ -4,7 +4,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 def pomName = "oaid-source"
-def oaidVersionName = "1.0.2"
+def oaidVersionName = "1.0.3"
 //def oaidVersionName = "1.0-SNAPSHOT"
 def outputName = pomName + "_" + oaidVersionName + ".aar"
 

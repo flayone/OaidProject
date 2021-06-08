@@ -157,7 +157,7 @@ public class OAIDHelper {
             Class clazz = Class.forName("android.os.SystemProperties");
             Method method = clazz.getMethod("get", new Class[]{String.class, String.class});
             res = (String) method.invoke(clazz, new Object[]{property, "unknown"});
-        } catch (Exception e) {
+        } catch (Throwable e) {
             // ignore
         }
         return res;

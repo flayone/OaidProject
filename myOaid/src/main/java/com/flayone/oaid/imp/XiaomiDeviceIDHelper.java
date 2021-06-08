@@ -27,28 +27,28 @@ public class XiaomiDeviceIDHelper {
         try {
             idProvider = Class.forName("com.android.id.impl.IdProviderImpl");
             idImpl = idProvider.newInstance();
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
 
         try {
             udid = idProvider.getMethod("getDefaultUDID", new Class[]{Context.class});
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
         try {
             oaid = idProvider.getMethod("getOAID", new Class[]{Context.class});
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
         try {
             vaid = idProvider.getMethod("getVAID", new Class[]{Context.class});
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
         try {
             aaid = idProvider.getMethod("getAAID", new Class[]{Context.class});
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
     }
@@ -58,7 +58,7 @@ public class XiaomiDeviceIDHelper {
         if (idImpl != null && method != null) {
             try {
                 result = (String) method.invoke(idImpl, ctx);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         }

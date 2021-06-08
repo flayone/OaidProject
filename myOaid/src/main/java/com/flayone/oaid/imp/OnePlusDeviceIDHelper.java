@@ -53,7 +53,7 @@ public class OnePlusDeviceIDHelper {
 
                 try {
                     SystemClock.sleep(3000);
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
                 if (onePlusIDInterface != null) {
@@ -83,7 +83,7 @@ public class OnePlusDeviceIDHelper {
             Signature[] signatures;
             try {
                 signatures = mContext.getPackageManager().getPackageInfo(pkgName, 64).signatures;
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
                 signatures = null;
             }
@@ -100,7 +100,7 @@ public class OnePlusDeviceIDHelper {
                         }
                         str2 = sb.toString();
                     }
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
             }
@@ -143,7 +143,7 @@ public class OnePlusDeviceIDHelper {
             if (ver < 1) {
                 return false;
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
         return res;

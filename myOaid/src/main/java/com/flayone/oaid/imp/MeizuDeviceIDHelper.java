@@ -44,7 +44,7 @@ public class MeizuDeviceIDHelper {
         try {
             try {
                 mContext.getPackageManager().getPackageInfo("com.meizu.flyme.openidsdk", 0);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
             Uri uri = Uri.parse("content://com.meizu.flyme.openidsdk/");

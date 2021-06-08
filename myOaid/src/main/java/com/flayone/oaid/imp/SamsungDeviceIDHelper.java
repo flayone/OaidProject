@@ -9,8 +9,6 @@ import android.os.IBinder;
 import com.flayone.oaid.AppIdsUpdater;
 import com.flayone.oaid.interfaces.SamsungIDInterface;
 
-import java.util.concurrent.LinkedBlockingQueue;
-
 /**
  * 三星手机获取OAid
  *
@@ -20,55 +18,69 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class SamsungDeviceIDHelper {
 
     private Context mContext;
-    public final LinkedBlockingQueue<IBinder> linkedBlockingQueue = new LinkedBlockingQueue(1);
+    AppIdsUpdater _listener;
 
     public SamsungDeviceIDHelper(Context ctx) {
         mContext = ctx;
     }
 
     public void getSumsungID(AppIdsUpdater _listener) {
+        this._listener = _listener;
+
         String oaid = "";
         try {
             try {
                 mContext.getPackageManager().getPackageInfo("com.samsung.android.deviceidservice", 0);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
 
             Intent intent = new Intent();
             intent.setClassName("com.samsung.android.deviceidservice", "com.samsung.android.deviceidservice.DeviceIdService");
             boolean isBinded = mContext.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-            if (isBinded) {
-                try {
-                    IBinder iBinder = linkedBlockingQueue.take();
-                    SamsungIDInterface.Proxy proxy = new SamsungIDInterface.Proxy(iBinder);       // 在这里有区别，需要实际验证
-                    oaid = proxy.getID();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+//            if (isBinded) {
+//                try {
+//                    IBinder iBinder = linkedBlockingQueue.take();
+//                    SamsungIDInterface.Proxy proxy = new SamsungIDInterface.Proxy(iBinder);       // 在这里有区别，需要实际验证
+//                    oaid = proxy.getID();
+//
+//                } catch (Throwable e) {
+//                    e.printStackTrace();
+//                }
+//            }
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        if (_listener != null) {
-            _listener.OnIdsAvalid(oaid);
-        }
+//        if (_listener != null) {
+//            _listener.OnIdsAvalid(oaid);
+//        }
     }
 
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             try {
-                linkedBlockingQueue.put(service);
-            } catch (Exception e) {
+                SamsungIDInterface.Proxy proxy = new SamsungIDInterface.Proxy(service);       // 在这里有区别，需要实际验证
+                String oaid = proxy.getID();
+                if (_listener != null) {
+                    _listener.OnIdsAvalid(oaid);
+                }
+                mContext.unbindService(serviceConnection);
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            try {
+                if (_listener != null) {
+                    _listener.OnIdsAvalid("");
+                }
+                mContext.unbindService(serviceConnection);
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
         }
     };
 }

@@ -108,7 +108,7 @@ public interface LenovoIDInterface extends IInterface {
                 obtain2.readException();
                 readString = obtain2.readString();
                 return readString;
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             } finally {
                 obtain2.recycle();
@@ -128,7 +128,7 @@ public interface LenovoIDInterface extends IInterface {
                 obtain2.readException();
                 readString = obtain2.readString();
                 return readString;
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             } finally {
                 obtain2.recycle();
@@ -148,7 +148,7 @@ public interface LenovoIDInterface extends IInterface {
                 obtain2.readException();
                 readString = obtain2.readString();
                 return readString;
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             } finally {
                 obtain2.recycle();
@@ -168,7 +168,7 @@ public interface LenovoIDInterface extends IInterface {
                 obtain2.readException();
                 readString = obtain2.readString();
                 return readString;
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             } finally {
                 obtain2.recycle();

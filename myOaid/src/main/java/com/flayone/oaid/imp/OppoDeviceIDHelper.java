@@ -52,7 +52,7 @@ public class OppoDeviceIDHelper {
             if (mContext.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)) {
                 try {
                     SystemClock.sleep(3000);
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                 }
                 if (oppoIDInterface != null) {
@@ -83,7 +83,7 @@ public class OppoDeviceIDHelper {
                 Signature[] signatures;
                 try {
                     signatures = mContext.getPackageManager().getPackageInfo(pkgName, 64).signatures;
-                } catch (Exception e) {
+                } catch (Throwable e) {
                     e.printStackTrace();
                     signatures = null;
                 }
@@ -100,7 +100,7 @@ public class OppoDeviceIDHelper {
                             }
                             str2 = sb.toString();
                         }
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         e.printStackTrace();
                     }
                 }

@@ -90,7 +90,7 @@ public class VivoDeviceIDHelper {
             Class clazz = Class.forName("android.os.SystemProperties");
             Method method = clazz.getMethod("get", new Class[]{String.class, String.class});
             res = (String) method.invoke(clazz, new Object[]{v1, "unknown"});
-        } catch (Exception e) {
+        } catch (Throwable e) {
             e.printStackTrace();
             return v2;
         }

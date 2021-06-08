@@ -419,7 +419,7 @@ public final class RomUtils {
             );
             prop.load(is);
             return prop.getProperty(key, "");
-        } catch (Exception ignore) {/**/}
+        } catch (Throwable ignore) {/**/}
         return "";
     }
 
@@ -429,7 +429,7 @@ public final class RomUtils {
             Class<?> clz = Class.forName("android.os.SystemProperties");
             Method getMethod = clz.getMethod("get", String.class, String.class);
             return (String) getMethod.invoke(clz, key, "");
-        } catch (Exception e) {/**/}
+        } catch (Throwable e) {/**/}
         return "";
     }
 

@@ -47,7 +47,7 @@ public interface OnePlusIDInterface extends IInterface {
                 iBinder.transact(1, obtain, obtain2, 0);
                 obtain2.readException();
                 res = obtain2.readString();
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             } finally {
                 obtain.recycle();
