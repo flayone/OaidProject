@@ -20,7 +20,7 @@
 
 ```
 	dependencies {
-	        implementation 'com.github.flayone:OaidProject:v1.0.3'
+	      implementation 'com.github.flayone.OaidProject:myOaid:1.0.4'
 	}
 ```
 
