@@ -27,25 +27,17 @@
 
 ### 获取OAID
 
-初始化
+ 
 
-```
-public class DemoApplication extends Application {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        //初始化代码获取的oaid值
-        MyOAID.init(this);
-    }
-}
-```
-
-获取oaid
+获取oaid结果有可能是异步返回的，使用时请注意这一点差异
 
 
 ```
-MyOAID.getOAID(this)
+ MyOAID.getOAID(this, new ResultCallBack() {
+            @Override
+            public void onResult(final String oaid) {
+                //获取到的oaid结果，如果是未支持的设备，有可能返回值为空
+            }
+        });
 ```
 

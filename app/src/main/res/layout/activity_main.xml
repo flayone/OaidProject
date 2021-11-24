@@ -13,40 +13,39 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <TextView
+    <Button
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:text="建议application中初始化，使用时获取 oaid 存储值使用，因为一部分手机（比如一加、oppo等）获取值是异步的，可能比较比较久才会返回oaid值。"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="@id/center"
+        android:layout_marginTop="20dp"
+        android:onClick="refresh"
+        android:text="重新获取"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/codeSaved"
+        android:id="@+id/myoaid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="my oaid存储值："
+        android:text=""
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="@id/center"
+        app:layout_constraintRight_toRightOf="parent "
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
 
 
     <TextView
-        android:id="@+id/code"
+        android:id="@+id/msaoaid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="my oaid实时获取值："
+        android:text=""
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/center"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.5" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

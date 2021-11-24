@@ -31,13 +31,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
 
-    //OAID 引入
-    //推荐使用此方式：源代码方式获取，大小65k
-//    implementation 'io.github.flayone:oaid-source:1.0'
-    implementation 'com.github.flayone:OaidProject:v1.0.3'
+    //OAID gradle 引入，推荐使用此方式：源代码方式获取，大小65k
+//    implementation 'com.github.flayone.OaidProject:myOaid:v1.0.3.1'
 
     //msa SDK方式获取，大小1.0M
-    implementation 'io.github.flayone:oaid-sdk:1.0.25'
-    implementation project(path: ':myOaid')
+    implementation 'com.github.flayone.OaidProject:msaOaid:v1.0.3.1'
 
+
+    implementation project(path: ':myOaid')
 }

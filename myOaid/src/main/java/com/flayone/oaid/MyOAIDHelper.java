@@ -25,15 +25,15 @@ import java.lang.reflect.Method;
  * @author AF
  * @time 2020/4/14 17:11
  */
-public class OAIDHelper {
+public class MyOAIDHelper {
 
     private AppIdsUpdater appIdsUpdater;
 
-    public OAIDHelper(AppIdsUpdater callback) {
+    public MyOAIDHelper(AppIdsUpdater callback) {
         appIdsUpdater = callback;
     }
 
-    public OAIDHelper() {
+    public MyOAIDHelper() {
     }
 
     /**
@@ -46,13 +46,13 @@ public class OAIDHelper {
         try {
             String oaid = null;
             String manufacturer = getManufacturer().toUpperCase();
-            Log.d("DevicesIDsHelper", "manufacturer===> " + manufacturer);
+            Log.d("MyOAIDHelper", "manufacturer===> " + manufacturer);
             if (mAppIdUpdateListener == null) {
                 return;
             }
 
             if (isFreeMeOS() || isSSUIOS()) {
-                getOAIDByNewThread(context,mAppIdUpdateListener);
+                getOAIDByNewThread(context, mAppIdUpdateListener);
             }
             DeviceTypeEnum deviceType = DeviceTypeEnum.getInstance(manufacturer);
             switch (deviceType) {
@@ -61,7 +61,7 @@ public class OAIDHelper {
                 case Oppo:
                 case OnePlus:
                 case ZTE:
-                    getOAIDByNewThread(context,mAppIdUpdateListener);
+                    getOAIDByNewThread(context, mAppIdUpdateListener);
                     break;
                 case Lenove:
                 case Motolora:
@@ -91,6 +91,35 @@ public class OAIDHelper {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * 判断是否为异步获取oaid的系统
+     *
+     * @param context
+     * @return
+     */
+    public static boolean isAsynchronousSystem(Context context) {
+        boolean result = false;
+        try {
+            if (isFreeMeOS() || isSSUIOS()) {
+                return true;
+            }
+            String manufacturer = getManufacturer().toUpperCase();
+            DeviceTypeEnum deviceType = DeviceTypeEnum.getInstance(manufacturer);
+            switch (deviceType) {
+                case HuaShuo:
+                case HuaWei:
+                case Oppo:
+                case OnePlus:
+                case ZTE:
+                    result = true;
+                    break;
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
 

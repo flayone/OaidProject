@@ -10,8 +10,7 @@ group = 'com.github.flayone'
 
 
 def pomName = "oaid-source"
-def oaidVersionName = "1.0.3"
-//def oaidVersionName = "1.0-SNAPSHOT"
+def oaidVersionName = "1.0.4"
 def outputName = pomName + "_" + oaidVersionName + ".aar"
 
 android {

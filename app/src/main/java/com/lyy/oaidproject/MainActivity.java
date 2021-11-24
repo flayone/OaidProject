@@ -3,47 +3,61 @@ package com.lyy.oaidproject;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.flayone.oaid.AppIdsUpdater;
 import com.flayone.oaid.MyOAID;
-import com.flayone.oaid.OAIDHelper;
+import com.flayone.oaid.ResultCallBack;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView oaidTextCode;
-    TextView oaidTextCodeSaved;
+    TextView MsaOaid;
+    TextView MyOaid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        oaidTextCodeSaved = findViewById(R.id.codeSaved);
-        oaidTextCode = findViewById(R.id.code);
+        MyOaid = findViewById(R.id.myoaid);
+        MsaOaid = findViewById(R.id.msaoaid);
 
+        getOAID();
+    }
 
-        //在init时已经获取了oaid值，如果有返回，此时会直接拿到本地存储的oaid值，不需等待。当APP第一次启动时，部分机型可能无法获取到，之后启动如果有值均能快速拿到。
-        oaidTextCodeSaved.setText("oaid 存储值：\n " + MyOAID.getOAID(this));
+    private void getOAID() {
 
-        //实时值部分机型上由于是异步的，获取的比较慢，不建议直接使用此方式获取
-        OAIDHelper.getOAid(this, new AppIdsUpdater() {
+        //MyOaid SDK方式(推荐)
+        MyOAID.getOAID(this, new ResultCallBack() {
             @Override
-            public void OnIdsAvalid(@NonNull final String id) {
-
+            public void onResult(final String oaid) {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        oaidTextCode.setText("oaid 实时值：\n " + id);
-
+                        MyOaid.setText("MyOaid SDK获取的Oaid值：\n " + oaid);
                     }
                 });
             }
         });
 
+        //msa SDK方式
+        new MsaOaidHelper(new MsaOaidHelper.OaidUpdater() {
+            @Override
+            public void IdReceived(@NonNull final String id) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        MsaOaid.setText("Msa SDK获取的Oaid值：\n " + id);
+                    }
+                });
+            }
+        }).getDeviceIds(this);
+    }
 
+    public void refresh(View view) {
+        getOAID();
     }
 }
