@@ -3,6 +3,12 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
+// JitPack Maven
+apply plugin: 'com.github.dcendents.android-maven'
+// Your Group
+group = 'com.github.flayone'
+
+
 def pomName = "oaid-source"
 def oaidVersionName = "1.0.3"
 //def oaidVersionName = "1.0-SNAPSHOT"
