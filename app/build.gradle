@@ -34,6 +34,7 @@ dependencies {
     //OAID 引入
     //推荐使用此方式：源代码方式获取，大小65k
 //    implementation 'io.github.flayone:oaid-source:1.0'
+    implementation 'com.github.flayone:OaidProject:v1.0.3'
 
     //msa SDK方式获取，大小1.0M
     implementation 'io.github.flayone:oaid-sdk:1.0.25'
