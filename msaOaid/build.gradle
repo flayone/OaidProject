@@ -11,6 +11,8 @@ group = 'com.github.flayone'
 def advanceVersionName = "1.0.25"
 def advanceVersionCode = 1
 
+def aarName = "oaid_sdk_" + advanceVersionName
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -56,7 +58,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    embed(name: 'oaid_sdk_1.0.25', ext: 'aar')
+    embed(name: aarName, ext: 'aar')
 
 }
 android.libraryVariants.all { variant ->
