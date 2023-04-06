@@ -24,13 +24,13 @@ public class MyOAID {
             public void OnIdsAvalid(@NonNull final String oaid) {
                 try {
                     Log.d(TAG, "[OnIdsAvalid] oaid= " + oaid);
-
+                    //无论获取值是否为空，都应该回调出去，防止无响应结果导致业务处理异常
+                    if (callBack != null) {
+                        callBack.onResult(oaid);
+                    }
                     if (TextUtils.isEmpty(oaid)) {
                         Log.e(TAG, "oaid为空,未获取到oaid");
                         return;
-                    }
-                    if (callBack != null) {
-                        callBack.onResult(oaid);
                     }
                     OAIDManager.getInstance().setOaId(oaid);
                     OAIDManager.saveString(context, SP_OAID, oaid);
@@ -45,6 +45,8 @@ public class MyOAID {
         try {
             String insOaid = OAIDManager.getInstance().getOaId();
             String savedOaid = OAIDManager.getSavedString(context, SP_OAID);
+//            String insOaid = "";
+//            String savedOaid = "";
             if (TextUtils.isEmpty(insOaid)) {
                 if (TextUtils.isEmpty(savedOaid)) {
                     //获取oaid

@@ -10,7 +10,7 @@ group = 'com.github.flayone'
 
 
 def pomName = "oaid-source"
-def oaidVersionName = "1.0.4"
+def oaidVersionName = "1.0.5"
 def outputName = pomName + "_" + oaidVersionName + ".aar"
 
 android {
@@ -28,6 +28,11 @@ android {
     }
 
     buildTypes {
+        debug{
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'

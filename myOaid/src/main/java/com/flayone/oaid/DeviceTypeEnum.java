@@ -6,6 +6,7 @@ public enum DeviceTypeEnum {
     Unknown("未知手机", "UNKNOWN"),
     HuaShuo("华硕手机", "ASUS"),
     HuaWei("华为手机", "HUAWEI"),
+    Honor("荣耀手机", "HONOR"),
     Lenove("联想手机", "LENOVO"),
     Motolora("摩托罗拉手机", "MOTOLORA"),
     Nubia("努比亚手机", "NUBIA"),

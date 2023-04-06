@@ -44,7 +44,7 @@ public class MyOAIDHelper {
     public static void getOAid(Context context, AppIdsUpdater mAppIdUpdateListener) {
 
         try {
-            String oaid = null;
+            String oaid = "";
             String manufacturer = getManufacturer().toUpperCase();
             Log.d("MyOAIDHelper", "manufacturer===> " + manufacturer);
             if (mAppIdUpdateListener == null) {
@@ -58,6 +58,7 @@ public class MyOAIDHelper {
             switch (deviceType) {
                 case HuaShuo:
                 case HuaWei:
+                case Honor:
                 case Oppo:
                 case OnePlus:
                 case ZTE:
@@ -84,6 +85,9 @@ public class MyOAIDHelper {
                 case XiaoMi:
                 case BlackShark:
                     oaid = new XiaomiDeviceIDHelper(context).getOAID();
+                    mAppIdUpdateListener.OnIdsAvalid(oaid);
+                    break;
+                default:
                     mAppIdUpdateListener.OnIdsAvalid(oaid);
                     break;
             }
@@ -145,6 +149,7 @@ public class MyOAIDHelper {
                                 new ASUSDeviceIDHelper(context).getID(mAppIdUpdateListener);
                                 break;
                             case HuaWei:
+                            case Honor:
                                 new HWDeviceIDHelper(context).getHWID(mAppIdUpdateListener);
                                 break;
                             case Oppo:
