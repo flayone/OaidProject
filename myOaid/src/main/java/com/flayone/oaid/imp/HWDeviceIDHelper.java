@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.flayone.oaid.AppIdsUpdater;
 import com.flayone.oaid.interfaces.HWIDInterface;
+import com.flayone.oaid.interfaces.IDGetterAction;
 
 /**
  * 华为手机获取OAid
@@ -20,28 +21,63 @@ import com.flayone.oaid.interfaces.HWIDInterface;
  * @author AF
  * @time 2020/4/14 18:24
  */
-public class HWDeviceIDHelper {
+public class HWDeviceIDHelper implements IDGetterAction {
 
-    private Context mContext;
+    private final Context mContext;
     AppIdsUpdater _listener;
 
     public HWDeviceIDHelper(Context ctx) {
         mContext = ctx;
     }
 
-    public void getHWID(AppIdsUpdater _listener) {
+    @Override
+    public boolean supported() {
+        if (mContext == null) {
+            return false;
+        }
+        boolean ret = false;
+        try {
+            String packageName;
+
+            PackageManager pm = mContext.getPackageManager();
+            if (pm.getPackageInfo("com.huawei.hwid", 0) != null) {
+                packageName = "com.huawei.hwid";
+                ret = true;
+            } else if (pm.getPackageInfo("com.huawei.hwid.tv", 0) != null) {
+                packageName = "com.huawei.hwid.tv";
+                ret = true;
+            } else {
+                packageName = "com.huawei.hms";
+                ret = pm.getPackageInfo(packageName, 0) != null;
+            }
+        } catch (Exception e) {
+//            OAIDLog.print(e);
+        }
+        return ret;
+    }
+
+    @Override
+    public void getID(final AppIdsUpdater _listener) {
         this._listener = _listener;
         try {
-
+            if (mContext == null) {
+                if (_listener != null) {
+                    _listener.OnIdsAvalid("");
+                }
+                return;
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 try {
                     String oaid = Settings.Global.getString(mContext.getContentResolver(), "pps_oaid");
                     if (!TextUtils.isEmpty(oaid)) {
                         Log.d("HWDeviceIDHelper", "Get oaid from global settings: " + oaid);
-                        if (_listener != null) {
-                            _listener.OnIdsAvalid(oaid);
+//                        2023-07-12 经测试，发现如果用户曾经关闭过OAID，那么此处获取的值，将一直是0000，因此需要排除全0的返回
+                        if (!isAllZero(oaid)) {
+                            if (_listener != null) {
+                                _listener.OnIdsAvalid(oaid);
+                            }
+                            return;
                         }
-                        return;
                     }
                 } catch (Exception e) {
 //                    OAIDLog.print(e);
@@ -66,11 +102,7 @@ public class HWDeviceIDHelper {
             } catch (Exception e) {
 
             }
-            try {
-                mContext.getPackageManager().getPackageInfo("com.huawei.hwid", 0);
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
+
 //           不支持返回空信息
             if (!ret) {
                 Log.d("HWDeviceIDHelper", "not supported");
@@ -111,11 +143,11 @@ public class HWDeviceIDHelper {
             try {
                 HWIDInterface.HWID hwID = new HWIDInterface.HWID(service);
                 String ids = hwID.getIDs();
+                Log.d("HWDeviceIDHelper", "ids = " + ids);
                 if (_listener != null) {
                     _listener.OnIdsAvalid(ids);
                 }
                 mContext.unbindService(serviceConnection);
-
             } catch (Throwable e) {
                 e.printStackTrace();
             }
@@ -134,5 +166,13 @@ public class HWDeviceIDHelper {
 
         }
     };
+
+    private static boolean isAllZero(String src) {
+        boolean result = false;
+        if (src != null) {
+            result=  "00000000-0000-0000-0000-000000000000".equals(src);
+        }
+        return result;
+    }
 
 }

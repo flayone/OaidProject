@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.flayone.oaid.AppIdsUpdater;
+import com.flayone.oaid.interfaces.IDGetterAction;
 
 /**
  * 魅族手机获取OAid
@@ -16,16 +17,17 @@ import com.flayone.oaid.AppIdsUpdater;
  * @author AF
  * @time 2020/4/14 18:25
  */
-public class MeizuDeviceIDHelper {
+public class MeizuDeviceIDHelper implements IDGetterAction {
 
-    private Context mContext;
+    private final Context mContext;
 
     public MeizuDeviceIDHelper(Context ctx) {
         mContext = ctx;
     }
 
 
-    private boolean isMeizuSupport() {
+    @Override
+    public boolean supported() {
         try {
             PackageManager pm = mContext.getPackageManager();
             if (pm != null) {
@@ -40,8 +42,15 @@ public class MeizuDeviceIDHelper {
         return false;
     }
 
-    public void getMeizuID(AppIdsUpdater _listener) {
+    @Override
+    public void getID(final AppIdsUpdater _listener) {
         try {
+            if (mContext == null) {
+                if (_listener != null) {
+                    _listener.OnIdsAvalid("");
+                }
+                return;
+            }
             try {
                 mContext.getPackageManager().getPackageInfo("com.meizu.flyme.openidsdk", 0);
             } catch (Throwable e) {

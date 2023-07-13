@@ -4,9 +4,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
 import android.os.IBinder;
 
 import com.flayone.oaid.AppIdsUpdater;
+import com.flayone.oaid.interfaces.IDGetterAction;
 import com.flayone.oaid.interfaces.SamsungIDInterface;
 
 /**
@@ -15,45 +17,46 @@ import com.flayone.oaid.interfaces.SamsungIDInterface;
  * @author AF
  * @time 2020/4/14 18:28
  */
-public class SamsungDeviceIDHelper {
+public class SamsungDeviceIDHelper implements IDGetterAction {
 
-    private Context mContext;
+    private final Context mContext;
     AppIdsUpdater _listener;
 
     public SamsungDeviceIDHelper(Context ctx) {
         mContext = ctx;
     }
 
-    public void getSumsungID(AppIdsUpdater _listener) {
-        this._listener = _listener;
 
-        String oaid = "";
+    @Override
+    public boolean supported() {
+        if (mContext == null) {
+            return false;
+        }
         try {
-            try {
-                mContext.getPackageManager().getPackageInfo("com.samsung.android.deviceidservice", 0);
-            } catch (Throwable e) {
-                e.printStackTrace();
+            PackageInfo pi = mContext.getPackageManager().getPackageInfo("com.samsung.android.deviceidservice", 0);
+            return pi != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Override
+    public void getID(final AppIdsUpdater _listener) {
+        this._listener = _listener;
+        if (mContext == null) {
+            if (_listener != null) {
+                _listener.OnIdsAvalid("");
             }
+            return;
+        }
+        try {
 
             Intent intent = new Intent();
             intent.setClassName("com.samsung.android.deviceidservice", "com.samsung.android.deviceidservice.DeviceIdService");
-            boolean isBinded = mContext.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
-//            if (isBinded) {
-//                try {
-//                    IBinder iBinder = linkedBlockingQueue.take();
-//                    SamsungIDInterface.Proxy proxy = new SamsungIDInterface.Proxy(iBinder);       // 在这里有区别，需要实际验证
-//                    oaid = proxy.getID();
-//
-//                } catch (Throwable e) {
-//                    e.printStackTrace();
-//                }
-//            }
+            mContext.bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE);
         } catch (Throwable e) {
             e.printStackTrace();
         }
-//        if (_listener != null) {
-//            _listener.OnIdsAvalid(oaid);
-//        }
     }
 
     ServiceConnection serviceConnection = new ServiceConnection() {

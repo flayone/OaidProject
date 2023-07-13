@@ -4,9 +4,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
 import android.os.IBinder;
 
 import com.flayone.oaid.AppIdsUpdater;
+import com.flayone.oaid.interfaces.IDGetterAction;
 import com.flayone.oaid.interfaces.ZTEIDInterface;
 
 import java.util.concurrent.LinkedBlockingQueue;
@@ -18,13 +20,27 @@ import java.util.concurrent.LinkedBlockingQueue;
  * @author AF
  * @time 2020/4/14 18:29
  */
-public class ZTEDeviceIDHelper {
+public class ZTEDeviceIDHelper implements IDGetterAction {
     Context mContext;
     String idPkgName = "com.mdid.msa";
     AppIdsUpdater _listener;
 
     public ZTEDeviceIDHelper(Context ctx) {
         mContext = ctx;
+    }
+
+
+    @Override
+    public boolean supported() {
+        if (mContext == null) {
+            return false;
+        }
+        try {
+            PackageInfo pi = mContext.getPackageManager().getPackageInfo("com.mdid.msa", 0);
+            return pi != null;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private int checkService() {
@@ -60,6 +76,7 @@ public class ZTEDeviceIDHelper {
         }
     }
 
+    @Override
     public void getID(AppIdsUpdater _listener) {
         try {
             try {
@@ -75,31 +92,31 @@ public class ZTEDeviceIDHelper {
             v0.setAction("com.bun.msa.action.bindto.service");
             v0.putExtra("com.bun.msa.param.pkgname", pkgName);
             boolean isBin = mContext.bindService(v0, serviceConnection, Context.BIND_AUTO_CREATE);
-            if (isBin) {
-                try {
-                    IBinder iBinder = linkedBlockingQueue.take();
-                    ZTEIDInterface zteidInterface = new ZTEIDInterface.Proxy(iBinder);
-                    String oaid = zteidInterface.getOAID();
-
-                    if (_listener != null) {
-                        _listener.OnIdsAvalid(oaid);
-                    }
-
-                    mContext.unbindService(serviceConnection);
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                } finally {
-                    if (serviceConnection != null) {
-                        mContext.unbindService(serviceConnection);
-                    }
-                }
-            }
+//            if (isBin) {
+//                try {
+//                    IBinder iBinder = linkedBlockingQueue.take();
+//                    ZTEIDInterface zteidInterface = new ZTEIDInterface.Proxy(iBinder);
+//                    String oaid = zteidInterface.getOAID();
+//
+//                    if (_listener != null) {
+//                        _listener.OnIdsAvalid(oaid);
+//                    }
+//
+//                    mContext.unbindService(serviceConnection);
+//                } catch (Throwable e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    if (serviceConnection != null) {
+//                        mContext.unbindService(serviceConnection);
+//                    }
+//                }
+//            }
         } catch (Throwable e) {
             e.printStackTrace();
         }
     }
 
-    public final LinkedBlockingQueue<IBinder> linkedBlockingQueue = new LinkedBlockingQueue(1);
+//    public final LinkedBlockingQueue<IBinder> linkedBlockingQueue = new LinkedBlockingQueue(1);
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:padding="10dp">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/center"
@@ -22,6 +23,33 @@
         android:text="重新获取"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/now"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:onClick="getNow"
+        android:text="实时获取"
+        app:layout_constraintTop_toBottomOf="@id/refresh" />
+
+    <TextView
+        android:id="@+id/tv_support"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:text="111"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/now" />
+
+    <TextView
+        android:id="@+id/tv_gaid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:text="gaid"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_support" />
+
     <TextView
         android:id="@+id/myoaid"
         android:layout_width="0dp"
@@ -32,7 +60,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent "
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.4" />
 
 
     <TextView
@@ -46,6 +74,18 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/now_oaid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

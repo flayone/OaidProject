@@ -11,7 +11,7 @@ import com.bun.miitmdid.interfaces.IIdentifierListener;
 import com.bun.miitmdid.interfaces.IdSupplier;
 
 public class MsaOaidHelper implements IIdentifierListener {
-    private String TAG = "[OAIDHelper] ";
+    private String TAG = "[MsaOaidHelper] ";
     private OaidUpdater oaidUpdater;
 
     public MsaOaidHelper(OaidUpdater oaidUpdater) {

@@ -1,7 +1,12 @@
 package com.flayone.oaid.imp;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.flayone.oaid.AppIdsUpdater;
+import com.flayone.oaid.interfaces.IDGetterAction;
+
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -10,74 +15,89 @@ import java.lang.reflect.Method;
  * @author AF
  * @time 2020/4/14 18:29
  */
-public class XiaomiDeviceIDHelper {
+public class XiaomiDeviceIDHelper implements IDGetterAction {
+    private static final String TAG = "[XiaomiDeviceIDHelper]";
     private Context mContext;
 
-    private Class idProvider;
-    private Object idImpl;
-    private Method udid;
-    private Method oaid;
-    private Method vaid;
-    private Method aaid;
+
+    private Class<?> idProviderClass;
+    private Object idProviderImpl;
+//
+//    private Class idProvider;
+//    private Object idImpl;
+//    private Method udid;
+//    private Method oaid;
+//    private Method vaid;
+//    private Method aaid;
 
 
     public XiaomiDeviceIDHelper(Context ctx) {
         mContext = ctx;
-
         try {
-            idProvider = Class.forName("com.android.id.impl.IdProviderImpl");
-            idImpl = idProvider.newInstance();
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-
-        try {
-            udid = idProvider.getMethod("getDefaultUDID", new Class[]{Context.class});
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        try {
-            oaid = idProvider.getMethod("getOAID", new Class[]{Context.class});
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        try {
-            vaid = idProvider.getMethod("getVAID", new Class[]{Context.class});
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        try {
-            aaid = idProvider.getMethod("getAAID", new Class[]{Context.class});
-        } catch (Throwable e) {
-            e.printStackTrace();
+            idProviderClass = Class.forName("com.android.id.impl.IdProviderImpl");
+            idProviderImpl = idProviderClass.newInstance();
+        } catch (Exception e) {
         }
     }
 
-    private String invokeMethod(Context ctx, Method method) {
-        String result = null;
-        if (idImpl != null && method != null) {
+
+    @Override
+    public boolean supported() {
+        return idProviderImpl != null;
+    }
+
+
+    @Override
+    public void getID(final AppIdsUpdater _listener) {
+
+        try {
+            String oaid = "";
+
             try {
-                result = (String) method.invoke(idImpl, ctx);
+                oaid = getOAID();
+                Log.d(TAG, "getID: " + "OAID query success: " + oaid);
             } catch (Throwable e) {
                 e.printStackTrace();
             }
+
+            if (_listener != null) {
+                _listener.OnIdsAvalid(oaid);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return result;
     }
 
-    public String getUDID() {
-        return invokeMethod(mContext, udid);
+    private String getOAID() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Method method = idProviderClass.getMethod("getOAID", Context.class);
+        return (String) method.invoke(idProviderImpl, mContext);
     }
 
-    public String getOAID() {
-        return invokeMethod(mContext, oaid);
-    }
+//    private String invokeMethod(Context ctx, Method method) {
+//        String result = null;
+//        if (idImpl != null && method != null) {
+//            try {
+//                result = (String) method.invoke(idImpl, ctx);
+//            } catch (Throwable e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return result;
+//    }
+//
+//    public String getUDID() {
+//        return invokeMethod(mContext, udid);
+//    }
 
-    public String getAAID() {
-        return invokeMethod(mContext, aaid);
-    }
-
-    public String getVAID() {
-        return invokeMethod(mContext, vaid);
-    }
+//    public String getOAID() {
+//        return invokeMethod(mContext, oaid);
+//    }
+//
+//    public String getAAID() {
+//        return invokeMethod(mContext, aaid);
+//    }
+//
+//    public String getVAID() {
+//        return invokeMethod(mContext, vaid);
+//    }
 }
