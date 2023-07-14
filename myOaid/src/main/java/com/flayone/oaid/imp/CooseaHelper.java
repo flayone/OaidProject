@@ -29,7 +29,7 @@ public class CooseaHelper implements IDGetterAction {
         }
         try {
             Object obj = keyguardManager.getClass().getDeclaredMethod("isSupported").invoke(keyguardManager);
-            return (Boolean) Objects.requireNonNull(obj);
+            return obj != null;
         } catch (Exception e) {
             return false;
         }
